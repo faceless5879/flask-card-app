@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 export default function NavigationBar() {
   const navigate = useNavigate();
   return (
-    <Navbar bg="success" variant="dark">
+    <Navbar bg="success" variant="dark" className="mb-2">
       <Container>
         <Navbar.Brand
           onClick={() => {

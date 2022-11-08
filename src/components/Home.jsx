@@ -4,7 +4,7 @@ import CreateNewCardBtn from "./common/CreateNewCardBtn";
 
 export default function Home() {
   return (
-    <Container className="mt-2">
+    <Container>
       <Carousel variant="dark">
         <Carousel.Item>
           <img
