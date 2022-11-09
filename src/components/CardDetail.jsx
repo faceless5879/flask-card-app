@@ -16,8 +16,23 @@ import { useLocation } from "react-router-dom";
 export default function CardDetail() {
   const location = useLocation();
   const cardArr = location.state["data"];
-  let cardIndex = location.state["index"];
-  const currentCard = cardArr[cardIndex];
+
+  const [cardIndex, setCardIndex] = useState(location.state["index"]);
+  const [currentCard, setCurrentCard] = useState(cardArr[cardIndex]);
+  const handleShowNextCard = () => {
+    const index = cardIndex + 1;
+    if (index >= cardArr.length) return;
+    setShowCardFront(true);
+    setCardIndex(index);
+    setCurrentCard(cardArr[index]);
+  };
+  const handleShowPreviousCard = () => {
+    const index = cardIndex - 1;
+    if (index < 0) return;
+    setShowCardFront(true);
+    setCardIndex(index);
+    setCurrentCard(cardArr[index]);
+  };
 
   const [showRemoveModal, setShowRemoveModal] = useState(false);
   const handleCloseRemoveModal = () => setShowRemoveModal(false);
@@ -90,10 +105,16 @@ export default function CardDetail() {
       )}
 
       <Container style={{ padding: 0, textAlign: "center", marginTop: 30 }}>
-        <Button variant="outline-success" style={{ marginRight: "30%" }}>
+        <Button
+          variant="outline-success"
+          style={{ marginRight: "30%" }}
+          onClick={handleShowPreviousCard}
+        >
           Previous card
         </Button>
-        <Button variant="outline-success">Next card</Button>
+        <Button variant="outline-success" onClick={handleShowNextCard}>
+          Next card
+        </Button>
       </Container>
       <RemoveCardModal
         show={showRemoveModal}
