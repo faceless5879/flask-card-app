@@ -11,6 +11,7 @@ import ModalImage from "react-modal-image";
 import RemoveCardModal from "./common/RemoveCardModal";
 import CreateNewCardBtn from "./common/CreateNewCardBtn";
 import CreateNewCardModal from "./common/CreateNewCardModal";
+import FrontBackToggle from "./common/FrontBackToggle";
 import { useLocation } from "react-router-dom";
 
 export default function CardDetail() {
@@ -61,20 +62,10 @@ export default function CardDetail() {
         {currentCard["cardName"]}
       </h1>
       <Container style={{ textAlign: "center", paddingTop: 10 }}>
-        <ButtonGroup type="radio" name="options">
-          <ToggleButton
-            variant={showCardFront ? "success" : "secondary"}
-            onClick={handleShowFrontBack}
-          >
-            Front
-          </ToggleButton>
-          <ToggleButton
-            variant={showCardFront ? "secondary" : "success"}
-            onClick={handleShowFrontBack}
-          >
-            Back
-          </ToggleButton>
-        </ButtonGroup>
+        <FrontBackToggle
+          showCardFront={showCardFront}
+          handleShowFrontBack={handleShowFrontBack}
+        />
       </Container>
 
       {showCardFront && (
