@@ -1,8 +1,6 @@
 import React from "react";
 import Container from "react-bootstrap/Container";
-import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import Button from "react-bootstrap/Button";
 import { useNavigate } from "react-router-dom";
 
 export default function NavigationBar() {
@@ -11,6 +9,7 @@ export default function NavigationBar() {
     <Navbar bg="success" variant="dark" className="mb-2">
       <Container>
         <Navbar.Brand
+          style={{ cursor: "pointer" }}
           onClick={() => {
             navigate("/");
           }}

@@ -1,8 +1,10 @@
 import React from "react";
 import { Container, Carousel, ListGroup, Anchor } from "react-bootstrap";
 import CreateNewCardBtn from "./common/CreateNewCardBtn";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
+  const navigate = useNavigate();
   return (
     <Container>
       <Carousel variant="dark">
@@ -34,7 +36,14 @@ export default function Home() {
       <CreateNewCardBtn className="mt-2" />
 
       <ListGroup className="mt-4">
-        <ListGroup.Item variant="primary">Cras justo odio</ListGroup.Item>
+        <ListGroup.Item
+          variant="primary"
+          onClick={() => {
+            navigate("/card-detail");
+          }}
+        >
+          Cras justo odio
+        </ListGroup.Item>
         <ListGroup.Item variant="primary">
           Dapibus ac facilisis in
         </ListGroup.Item>
