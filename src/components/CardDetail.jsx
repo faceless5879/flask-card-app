@@ -11,8 +11,14 @@ import ModalImage from "react-modal-image";
 import RemoveCardModal from "./common/RemoveCardModal";
 import CreateNewCardBtn from "./common/CreateNewCardBtn";
 import CreateNewCardModal from "./common/CreateNewCardModal";
+import { useLocation } from "react-router-dom";
 
-export default function Home() {
+export default function CardDetail() {
+  const location = useLocation();
+  const cardArr = location.state["data"];
+  let cardIndex = location.state["index"];
+  const currentCard = cardArr[cardIndex];
+
   const [showRemoveModal, setShowRemoveModal] = useState(false);
   const handleCloseRemoveModal = () => setShowRemoveModal(false);
   const handleShowRemoveModal = () => setShowRemoveModal(true);
@@ -36,7 +42,9 @@ export default function Home() {
         </Button>
         <CreateNewCardBtn handleShow={handleShowCreateCardModal} />
       </Container>
-      <h1 style={{ textAlign: "center", paddingTop: 20 }}>Card name</h1>
+      <h1 style={{ textAlign: "center", paddingTop: 20 }}>
+        {currentCard["cardName"]}
+      </h1>
       <Container style={{ textAlign: "center", paddingTop: 10 }}>
         <ButtonGroup type="radio" name="options">
           <ToggleButton
@@ -64,9 +72,9 @@ export default function Home() {
           }}
         >
           <ModalImage
-            small={require("../Screenshot_18.png")}
-            large={require("../Screenshot_18.png")}
-            alt="picname"
+            small={currentCard["picUrl"]}
+            large={currentCard["picUrl"]}
+            alt={currentCard["cardName"]}
           />
         </Container>
       )}
@@ -77,11 +85,11 @@ export default function Home() {
           aria-label="With textarea"
           style={{ marginTop: 20, height: "250px", tabSize: 4 }}
           readOnly
-          defaultValue={"aaaaaaaaaaa\n\taaaaaaaa"}
+          defaultValue={currentCard["content"]}
         ></Form.Control>
       )}
 
-      <Container style={{ padding: 0, textAlign: "center", paddingTop: 30 }}>
+      <Container style={{ padding: 0, textAlign: "center", marginTop: 30 }}>
         <Button variant="outline-success" style={{ marginRight: "30%" }}>
           Previous card
         </Button>

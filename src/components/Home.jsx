@@ -5,6 +5,19 @@ import { useNavigate } from "react-router-dom";
 
 export default function Home() {
   const navigate = useNavigate();
+  const data = [
+    {
+      picUrl: require("../Screenshot_18.png"),
+      content: "pic 1 content",
+      cardName: "card 1",
+    },
+    {
+      picUrl: require("../Screenshot_17.png"),
+      content: "pic 2 content",
+      cardName: "card 2",
+    },
+  ];
+
   return (
     <Container>
       <Carousel variant="dark">
@@ -36,22 +49,22 @@ export default function Home() {
       <CreateNewCardBtn className="mt-2" />
 
       <ListGroup className="mt-4">
-        <ListGroup.Item
-          variant="primary"
-          onClick={() => {
-            navigate("/card-detail");
-          }}
-        >
-          Cras justo odio
-        </ListGroup.Item>
-        <ListGroup.Item variant="primary">
-          Dapibus ac facilisis in
-        </ListGroup.Item>
-        <ListGroup.Item variant="primary">Morbi leo risus</ListGroup.Item>
-        <ListGroup.Item variant="primary">
-          Porta ac consectetur ac
-        </ListGroup.Item>
-        <ListGroup.Item variant="primary">Vestibulum at eros</ListGroup.Item>
+        {data.map((item) => {
+          const index = data.indexOf(item);
+          return (
+            <ListGroup.Item
+              key={index}
+              variant="primary"
+              onClick={() => {
+                navigate("/card-detail", {
+                  state: { index: index, data: data },
+                });
+              }}
+            >
+              {item["cardName"]}
+            </ListGroup.Item>
+          );
+        })}
       </ListGroup>
       <Anchor>View all cards</Anchor>
     </Container>
