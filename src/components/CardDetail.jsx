@@ -8,21 +8,26 @@ import CreateNewCardModal from "./common/CreateNewCardModal";
 import FrontBackToggle from "./common/FrontBackToggle";
 import { useLocation } from "react-router-dom";
 
-export default function CardDetail() {
+export default function CardDetail(props) {
   const location = useLocation();
+  const { setCardArr } = props;
 
-  const [cardArr, setCardArr] = useState(location.state["data"]);
+  const [cardArr, setCardsArr] = useState(location.state["data"]);
   const handleRemoveCardFromArr = (item) => {
     const newCardArr = cardArr;
     const itemIndex = newCardArr.indexOf(item);
     newCardArr.splice(itemIndex, 1);
     setCardArr(newCardArr);
   };
-  const handleAddCardFromArr = (item) => {
+
+  /**
+    const handleAddCardFromArr = (item) => {
     const newCardArr = cardArr;
     newCardArr.push(item);
+    console.log(newCardArr);
     setCardArr(newCardArr);
   };
+   */
 
   const [cardIndex, setCardIndex] = useState(location.state["index"]);
   const [currentCard, setCurrentCard] = useState(cardArr[cardIndex]);
@@ -76,10 +81,9 @@ export default function CardDetail() {
       {showCardFront && (
         <Container
           style={{
-            height: "250px",
+            padding: 0,
             marginTop: 20,
             border: "1px solid #ced4da",
-            borderRadius: "5px",
           }}
         >
           <ModalImage

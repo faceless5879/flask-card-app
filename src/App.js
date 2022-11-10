@@ -1,11 +1,28 @@
 import "./App.css";
+import React, { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import NavBar from "./components/Navbar";
 import Home from "./components/Home";
 import CardDetail from "./components/CardDetail";
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 function App() {
+  const [cardArr, setCardArr] = useState([]);
+
+  useEffect(
+    () => async () => {
+      try {
+        const response = await fetch(`${API_URL}/card/`);
+        const data = await response.json();
+        setCardArr(data);
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    []
+  );
   return (
     <>
       {/* this imports the default css for bootstrap 
@@ -19,8 +36,16 @@ function App() {
       <Container fluid>
         <NavBar />
         <Routes>
-          <Route exact path="/" element={<Home />} />
-          <Route exact path="/card-detail" element={<CardDetail />} />
+          <Route
+            exact
+            path="/"
+            element={<Home cardArr={cardArr} setCardArr={setCardArr} />}
+          />
+          <Route
+            exact
+            path="/card-detail"
+            element={<CardDetail cardArr={cardArr} setCardArr={setCardArr} />}
+          />
         </Routes>
       </Container>
     </>

@@ -4,55 +4,54 @@ import CreateNewCardBtn from "./common/CreateNewCardBtn";
 import { useNavigate } from "react-router-dom";
 import CreateNewCardModal from "./common/CreateNewCardModal";
 
-const API_URL = process.env.REACT_APP_API_URL;
+export default function Home(props) {
+  const { cardArr, setCardArr } = props;
 
-export default function Home() {
   const navigate = useNavigate();
 
   const [showCreateCardModal, setShowCreateCardModal] = useState(false);
   const handleCloseCreateCardModal = () => setShowCreateCardModal(false);
   const handleShowCreateCardModal = () => setShowCreateCardModal(true);
 
-  const [cardArr, setCardArr] = useState([]);
-
-  useEffect(
-    () => async () => {
-      try {
-        const response = await fetch(`${API_URL}/card/`);
-        const data = await response.json();
-        setCardArr(data);
-      } catch (e) {
-        console.error(e);
-      }
-    },
-    []
-  );
-
   return (
     <Container>
       <Carousel variant="dark">
         <Carousel.Item>
           <img
-            className="d-block w-100"
-            src={require("../Screenshot_18.png")}
+            style={{
+              width: 350,
+              height: 200,
+              objectFit: "cover",
+              opacity: 0.55,
+            }}
+            src={require("../english-alphabet-flash-cards-mrprintables.jpg")}
             alt="First slide"
           />
           <Carousel.Caption>
             <h5 className="text">Welcome to</h5>
             <h1 className="text">Flask cards</h1>
-            <p>Create your flask cards and learn everywhere!</p>
+            <p>
+              <b>Create your flask cards and learn everywhere!</b>
+            </p>
           </Carousel.Caption>
         </Carousel.Item>
         <Carousel.Item>
           <img
-            className="d-block w-100"
-            src={require("../Screenshot_18.png")}
+            style={{
+              width: 350,
+              height: 200,
+              objectFit: "cover",
+              opacity: 0.55,
+            }}
+            src={require("../english-alphabet-flash-cards-mrprintables.jpg")}
             alt="Third slide"
           />
 
           <Carousel.Caption>
             <h3>Easy to manage</h3>
-            <p>Start now!</p>
+            <p>
+              <b>Start now!</b>
+            </p>
           </Carousel.Caption>
         </Carousel.Item>
       </Carousel>

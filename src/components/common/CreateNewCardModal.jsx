@@ -60,6 +60,7 @@ export default function CreateNewCardModal(props) {
     } catch (e) {
       console.error(e);
     }
+    handleClose();
   };
 
   return (
