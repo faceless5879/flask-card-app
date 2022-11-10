@@ -36,13 +36,13 @@ export default function CreateNewCardModal(props) {
     e.preventDefault();
     const newCard = {
       cardName: cardName,
-      content: cardContent,
+      cardContent: cardContent,
       picUrl: fileUrl,
     };
     if (!newCard["cardName"]) {
       return;
     }
-    if (!newCard["content"]) {
+    if (!newCard["cardContent"]) {
       return;
     }
     if (!newCard["picUrl"]) {

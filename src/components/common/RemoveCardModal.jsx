@@ -16,7 +16,7 @@ export default function RemoveCardModal(props) {
 
   const handleDeleteCard = async () => {
     try {
-      await fetch(`${API_URL}/card/${card["cardid"] || 1}`, {
+      await fetch(`${API_URL}/card/${card["cardId"]}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
