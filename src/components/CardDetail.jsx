@@ -1,12 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import {
-  Container,
-  Button,
-  Form,
-  ToggleButton,
-  ButtonGroup,
-} from "react-bootstrap";
+import { Container, Button, Form } from "react-bootstrap";
 import ModalImage from "react-modal-image";
 import RemoveCardModal from "./common/RemoveCardModal";
 import CreateNewCardBtn from "./common/CreateNewCardBtn";
@@ -16,7 +10,19 @@ import { useLocation } from "react-router-dom";
 
 export default function CardDetail() {
   const location = useLocation();
-  const cardArr = location.state["data"];
+
+  const [cardArr, setCardArr] = useState(location.state["data"]);
+  const handleRemoveCardFromArr = (item) => {
+    const newCardArr = cardArr;
+    const itemIndex = newCardArr.indexOf(item);
+    newCardArr.splice(itemIndex, 1);
+    setCardArr(newCardArr);
+  };
+  const handleAddCardFromArr = (item) => {
+    const newCardArr = cardArr;
+    newCardArr.push(item);
+    setCardArr(newCardArr);
+  };
 
   const [cardIndex, setCardIndex] = useState(location.state["index"]);
   const [currentCard, setCurrentCard] = useState(cardArr[cardIndex]);
@@ -51,7 +57,7 @@ export default function CardDetail() {
       <Container style={{ padding: 0, textAlign: "center" }}>
         <Button
           variant="outline-danger"
-          style={{ marginRight: "20%" }}
+          style={{ marginRight: "20%", marginTop: 20 }}
           onClick={handleShowRemoveModal}
         >
           Remove card
@@ -67,7 +73,6 @@ export default function CardDetail() {
           handleShowFrontBack={handleShowFrontBack}
         />
       </Container>
-
       {showCardFront && (
         <Container
           style={{
@@ -91,7 +96,7 @@ export default function CardDetail() {
           aria-label="With textarea"
           style={{ marginTop: 20, height: "250px", tabSize: 4 }}
           readOnly
-          defaultValue={currentCard["content"]}
+          defaultValue={currentCard["cardContent"]}
         ></Form.Control>
       )}
 
@@ -110,6 +115,9 @@ export default function CardDetail() {
       <RemoveCardModal
         show={showRemoveModal}
         handleClose={handleCloseRemoveModal}
+        card={currentCard}
+        handleShowNextCard={handleShowNextCard}
+        handleRemoveCardFromArr={handleRemoveCardFromArr}
       />
       <CreateNewCardModal
         show={showCreateCardModal}

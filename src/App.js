@@ -1,8 +1,6 @@
-import { useState } from "react";
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import Container from "react-bootstrap/Container";
-import { storage } from "./base";
 import NavBar from "./components/Navbar";
 import Home from "./components/Home";
 import CardDetail from "./components/CardDetail";

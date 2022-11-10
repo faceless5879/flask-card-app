@@ -1,22 +1,32 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Carousel, ListGroup, Anchor } from "react-bootstrap";
 import CreateNewCardBtn from "./common/CreateNewCardBtn";
 import { useNavigate } from "react-router-dom";
+import CreateNewCardModal from "./common/CreateNewCardModal";
+
+const API_URL = process.env.REACT_APP_API_URL;
 
 export default function Home() {
   const navigate = useNavigate();
-  const data = [
-    {
-      picUrl: require("../Screenshot_18.png"),
-      content: "pic 1 content",
-      cardName: "card 1",
+
+  const [showCreateCardModal, setShowCreateCardModal] = useState(false);
+  const handleCloseCreateCardModal = () => setShowCreateCardModal(false);
+  const handleShowCreateCardModal = () => setShowCreateCardModal(true);
+
+  const [cardArr, setCardArr] = useState([]);
+
+  useEffect(
+    () => async () => {
+      try {
+        const response = await fetch(`${API_URL}/card/`);
+        const data = await response.json();
+        setCardArr(data);
+      } catch (e) {
+        console.error(e);
+      }
     },
-    {
-      picUrl: require("../Screenshot_17.png"),
-      content: "pic 2 content",
-      cardName: "card 2",
-    },
-  ];
+    []
+  );
 
   return (
     <Container>
@@ -46,18 +56,18 @@ export default function Home() {
           </Carousel.Caption>
         </Carousel.Item>
       </Carousel>
-      <CreateNewCardBtn className="mt-2" />
+      <CreateNewCardBtn handleShow={handleShowCreateCardModal} />
 
       <ListGroup className="mt-4">
-        {data.map((item) => {
-          const index = data.indexOf(item);
+        {cardArr.map((item) => {
+          const index = cardArr.indexOf(item);
           return (
             <ListGroup.Item
               key={index}
               variant="primary"
               onClick={() => {
                 navigate("/card-detail", {
-                  state: { index: index, data: data },
+                  state: { index: index, data: cardArr },
                 });
               }}
             >
@@ -67,6 +77,10 @@ export default function Home() {
         })}
       </ListGroup>
       <Anchor>View all cards</Anchor>
+      <CreateNewCardModal
+        show={showCreateCardModal}
+        handleClose={handleCloseCreateCardModal}
+      />
     </Container>
   );
 }

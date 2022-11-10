@@ -3,22 +3,63 @@ import { useState } from "react";
 import FrontBackToggle from "./FrontBackToggle";
 import { storage } from "../../base";
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 export default function CreateNewCardModal(props) {
   const { show, handleClose } = props;
+
   const [showCardFront, setShowCardFront] = useState(true);
   const handleShowFrontBack = () => setShowCardFront(!showCardFront);
-  const [fileUrl, setFileUrl] = useState(null);
 
+  const [fileUrl, setFileUrl] = useState(null);
   const onFileChange = async (e) => {
     const file = e.target.files[0];
     const storageRef = storage.ref();
     const fileRef = storageRef.child(file.name);
     await fileRef.put(file);
     setFileUrl(await fileRef.getDownloadURL());
-    console.log(fileUrl);
   };
-  const handleSubmit = (e) => {
-    e.prevenDefault();
+
+  const [cardName, setCardName] = useState("");
+  const onNameChange = (e) => {
+    const userInput = e.target.value;
+    setCardName(userInput);
+  };
+
+  const [cardContent, setCardContent] = useState("");
+  const onContentChange = (e) => {
+    const userInput = e.target.value;
+    setCardContent(userInput);
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    const newCard = {
+      cardName: cardName,
+      content: cardContent,
+      picUrl: fileUrl,
+    };
+    if (!newCard["cardName"]) {
+      return;
+    }
+    if (!newCard["content"]) {
+      return;
+    }
+    if (!newCard["picUrl"]) {
+      return;
+    }
+    console.log(newCard);
+    try {
+      await fetch(`${API_URL}/card/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newCard),
+      });
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (
@@ -37,7 +78,7 @@ export default function CreateNewCardModal(props) {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form>
+        <Form onSubmit={onSubmit}>
           <Container style={{ textAlign: "center", paddingBottom: 10 }}>
             <FrontBackToggle
               showCardFront={showCardFront}
@@ -54,6 +95,7 @@ export default function CreateNewCardModal(props) {
             <Form.Control
               aria-label="Default"
               aria-describedby="inputGroup-sizing-default"
+              onChange={onNameChange}
               placeholder="Enter card name"
             />
           </InputGroup>
@@ -71,28 +113,26 @@ export default function CreateNewCardModal(props) {
             aria-label="With textarea"
             style={{ tabSize: 4, height: 200 }}
             placeholder="Enter card content here"
+            onChange={onContentChange}
           ></Form.Control>
+          <Container style={{ textAlign: "center", paddingTop: 20 }}>
+            <Button
+              variant="secondary"
+              onClick={handleClose}
+              style={{ marginRight: "10%" }}
+            >
+              Close
+            </Button>
+            <Button
+              type="submit"
+              variant="primary"
+              style={{ marginLeft: "10%" }}
+            >
+              Confirm
+            </Button>
+          </Container>
         </Form>
       </Modal.Body>
-      <Modal.Footer>
-        <Container style={{ textAlign: "center" }}>
-          <Button
-            variant="secondary"
-            onClick={handleClose}
-            style={{ marginRight: "10%" }}
-          >
-            Close
-          </Button>
-          <Button
-            type="submit"
-            variant="primary"
-            onClick={handleClose}
-            style={{ marginLeft: "10%" }}
-          >
-            Confirm
-          </Button>
-        </Container>
-      </Modal.Footer>
     </Modal>
   );
 }
