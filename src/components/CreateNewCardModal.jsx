@@ -1,12 +1,12 @@
 import { Modal, Container, Button, InputGroup, Form } from "react-bootstrap";
 import { useState } from "react";
 import FrontBackToggle from "./FrontBackToggle";
-import { storage } from "../../base";
-
-const API_URL = process.env.REACT_APP_API_URL;
+import { storage } from "../base";
+import { postCard, addCardToStack } from "../actions/card";
+import { showHideModal } from "../actions/modal";
 
 export default function CreateNewCardModal(props) {
-  const { show, handleClose, handleAddCardFromArr } = props;
+  const { showState, setShowState, setCardArr, cardArr } = props;
 
   const [showCardFront, setShowCardFront] = useState(true);
   const handleShowFrontBack = () => setShowCardFront(!showCardFront);
@@ -48,26 +48,17 @@ export default function CreateNewCardModal(props) {
     if (!newCard["picUrl"]) {
       return;
     }
-    console.log(newCard);
-    try {
-      await fetch(`${API_URL}/card/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newCard),
-      });
-    } catch (e) {
-      console.error(e);
-    }
-    handleAddCardFromArr(newCard);
-    handleClose();
+    postCard(newCard);
+    addCardToStack(cardArr, newCard, setCardArr);
+    showHideModal(showState, setShowState);
   };
 
   return (
     <Modal
-      show={show}
-      onHide={handleClose}
+      show={showState}
+      onHide={() => {
+        showHideModal(showState, setShowState);
+      }}
       backdrop="static"
       keyboard={false}
       size="lg"
@@ -120,7 +111,9 @@ export default function CreateNewCardModal(props) {
           <Container style={{ textAlign: "center", paddingTop: 20 }}>
             <Button
               variant="secondary"
-              onClick={handleClose}
+              onClick={() => {
+                showHideModal(showState, setShowState);
+              }}
               style={{ marginRight: "10%" }}
             >
               Close

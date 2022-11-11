@@ -1,13 +1,16 @@
 import { Button } from "react-bootstrap";
+import { showHideModal } from "../actions/modal";
 
 export default function CreateNewCardBtn(props) {
-  const { handleShow } = props;
+  const { showState, setShowState } = props;
   return (
     <>
       <Button
         style={{ marginTop: 20 }}
         variant="outline-success"
-        onClick={handleShow}
+        onClick={() => {
+          showHideModal(showState, setShowState);
+        }}
       >
         Create new card
       </Button>

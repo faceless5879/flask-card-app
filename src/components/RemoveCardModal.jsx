@@ -2,42 +2,38 @@ import React from "react";
 import { Container } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-
-const API_URL = process.env.REACT_APP_API_URL;
+import { deleteCard, removeCardFromStack } from "../actions/card";
+import { showHideModal } from "../actions/modal";
 
 export default function RemoveCardModal(props) {
   const {
-    handleClose,
-    show,
+    showState,
+    setShowState,
     card,
     cardIndex,
     cardArr,
+    setCardArr,
     handleShowNextCard,
     handleShowPreviousCard,
-    handleRemoveCardFromArr,
   } = props;
 
-  const handleDeleteCard = async () => {
-    try {
-      await fetch(`${API_URL}/card/${card["cardId"]}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-    } catch (e) {
-      console.error(e);
-    }
-    handleClose();
+  const handleDeleteCard = () => {
+    deleteCard(card["cardId"]);
+    showHideModal(showState, setShowState);
     cardIndex < cardArr.length - 1
       ? handleShowNextCard()
       : handleShowPreviousCard();
-    handleRemoveCardFromArr(card);
+    removeCardFromStack(cardArr, card, setCardArr);
   };
 
   return (
     <>
-      <Modal show={show} onHide={handleClose}>
+      <Modal
+        show={showState}
+        onHide={() => {
+          showHideModal(showState, setShowState);
+        }}
+      >
         <Modal.Header closeButton>
           <Modal.Title>Remove this card?</Modal.Title>
         </Modal.Header>
@@ -48,7 +44,9 @@ export default function RemoveCardModal(props) {
           <Container style={{ textAlign: "center" }}>
             <Button
               variant="secondary"
-              onClick={handleClose}
+              onClick={() => {
+                showHideModal(showState, setShowState);
+              }}
               style={{ marginRight: "10%" }}
             >
               Close

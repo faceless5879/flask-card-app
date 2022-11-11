@@ -2,38 +2,23 @@ import React from "react";
 import { useState } from "react";
 import { Container, Button, Form } from "react-bootstrap";
 import ModalImage from "react-modal-image";
-import RemoveCardModal from "./common/RemoveCardModal";
-import CreateNewCardBtn from "./common/CreateNewCardBtn";
-import CreateNewCardModal from "./common/CreateNewCardModal";
-import FrontBackToggle from "./common/FrontBackToggle";
+import RemoveCardModal from "../components/RemoveCardModal";
+import CreateNewCardBtn from "../components/CreateNewCardBtn";
+import CreateNewCardModal from "../components/CreateNewCardModal";
+import FrontBackToggle from "../components/FrontBackToggle";
 import { useLocation } from "react-router-dom";
+import { showHideModal } from "../actions/modal";
 
 export default function CardDetail(props) {
   const location = useLocation();
   const { setCardArr, cardArr } = props;
 
-  const handleRemoveCardFromArr = (item) => {
-    const newCardArr = cardArr;
-    const itemIndex = newCardArr.indexOf(item);
-    newCardArr.splice(itemIndex, 1);
-    setCardArr(newCardArr);
-  };
-
-  const handleAddCardFromArr = (item) => {
-    const newCardArr = cardArr;
-    newCardArr.push(item);
-    console.log(newCardArr);
-    setCardArr(newCardArr);
-  };
-
-  try {
-    console.log(cardArr);
-  } catch (error) {
-    console.log(error);
-  }
-
+  const [showRemoveModal, setShowRemoveModal] = useState(false);
+  const [showCreateCardModal, setShowCreateCardModal] = useState(false);
+  const [showCardFront, setShowCardFront] = useState(true);
   const [cardIndex, setCardIndex] = useState(location.state["index"]);
   const [currentCard, setCurrentCard] = useState(cardArr[cardIndex]);
+
   const handleShowNextCard = () => {
     const index = cardIndex + 1;
     if (index >= cardArr.length) return;
@@ -49,36 +34,30 @@ export default function CardDetail(props) {
     setCurrentCard(cardArr[index]);
   };
 
-  const [showRemoveModal, setShowRemoveModal] = useState(false);
-  const handleCloseRemoveModal = () => setShowRemoveModal(false);
-  const handleShowRemoveModal = () => setShowRemoveModal(true);
-
-  const [showCreateCardModal, setShowCreateCardModal] = useState(false);
-  const handleCloseCreateCardModal = () => setShowCreateCardModal(false);
-  const handleShowCreateCardModal = () => setShowCreateCardModal(true);
-
-  const [showCardFront, setShowCardFront] = useState(true);
-  const handleShowFrontBack = () => setShowCardFront(!showCardFront);
-
   return (
     <Container>
       <Container style={{ padding: 0, textAlign: "center" }}>
         <Button
           variant="outline-danger"
           style={{ marginRight: "20%", marginTop: 20 }}
-          onClick={handleShowRemoveModal}
+          onClick={() => {
+            showHideModal(showRemoveModal, setShowRemoveModal);
+          }}
         >
           Remove card
         </Button>
-        <CreateNewCardBtn handleShow={handleShowCreateCardModal} />
+        <CreateNewCardBtn
+          showState={showCreateCardModal}
+          setShowState={setShowCreateCardModal}
+        />
       </Container>
       <h1 style={{ textAlign: "center", paddingTop: 20 }}>
         {currentCard["cardName"]}
       </h1>
       <Container style={{ textAlign: "center", paddingTop: 10 }}>
         <FrontBackToggle
-          showCardFront={showCardFront}
-          handleShowFrontBack={handleShowFrontBack}
+          showState={showCardFront}
+          setShowState={setShowCardFront}
         />
       </Container>
       {showCardFront && (
@@ -120,19 +99,20 @@ export default function CardDetail(props) {
         </Button>
       </Container>
       <RemoveCardModal
-        show={showRemoveModal}
-        handleClose={handleCloseRemoveModal}
+        showState={showRemoveModal}
+        setShowState={setShowRemoveModal}
         card={currentCard}
         cardIndex={cardIndex}
         cardArr={cardArr}
+        setCardArr={setCardArr}
         handleShowNextCard={handleShowNextCard}
         handleShowPreviousCard={handleShowPreviousCard}
-        handleRemoveCardFromArr={handleRemoveCardFromArr}
       />
       <CreateNewCardModal
-        show={showCreateCardModal}
-        handleClose={handleCloseCreateCardModal}
-        handleAddCardFromArr={handleAddCardFromArr}
+        showState={showCreateCardModal}
+        setShowState={setShowCreateCardModal}
+        setCardArr={setCardArr}
+        cardArr={cardArr}
       />
     </Container>
   );

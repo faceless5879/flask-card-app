@@ -2,10 +2,9 @@ import "./App.css";
 import React, { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import NavBar from "./components/Navbar";
-import Home from "./components/Home";
-import CardDetail from "./components/CardDetail";
-
-const API_URL = process.env.REACT_APP_API_URL;
+import Home from "./pages/Home";
+import CardDetail from "./pages/CardDetail";
+import { loadCard } from "./actions/card";
 
 function App() {
   return <Index />;
@@ -14,22 +13,11 @@ function App() {
 const Index = () => {
   const [cardArr, setCardArr] = useState([]);
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        const response = await fetch(`${API_URL}/card/`);
-        const data = await response.json();
-        setCardArr(data);
-      } catch (e) {
-        console.error(e);
-      }
-    };
-    loadData();
+    loadCard(setCardArr);
   }, []);
 
   return (
     <>
-      {/* this imports the default css for bootstrap 
-      it is required for things like striped bordered hover variant="dark" */}
       <link
         rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
