@@ -1,7 +1,6 @@
 import "./App.css";
 import React, { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
-import Container from "react-bootstrap/Container";
 import NavBar from "./components/Navbar";
 import Home from "./components/Home";
 import CardDetail from "./components/CardDetail";
@@ -9,10 +8,13 @@ import CardDetail from "./components/CardDetail";
 const API_URL = process.env.REACT_APP_API_URL;
 
 function App() {
-  const [cardArr, setCardArr] = useState([]);
+  return <Index />;
+}
 
-  useEffect(
-    () => async () => {
+const Index = () => {
+  const [cardArr, setCardArr] = useState([]);
+  useEffect(() => {
+    const loadData = async () => {
       try {
         const response = await fetch(`${API_URL}/card/`);
         const data = await response.json();
@@ -20,9 +22,10 @@ function App() {
       } catch (e) {
         console.error(e);
       }
-    },
-    []
-  );
+    };
+    loadData();
+  }, []);
+
   return (
     <>
       {/* this imports the default css for bootstrap 
@@ -33,23 +36,19 @@ function App() {
         integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
         crossOrigin="anonymous"
       />
-      <Container fluid>
-        <NavBar />
-        <Routes>
-          <Route
-            exact
-            path="/"
-            element={<Home cardArr={cardArr} setCardArr={setCardArr} />}
-          />
-          <Route
-            exact
-            path="/card-detail"
-            element={<CardDetail cardArr={cardArr} setCardArr={setCardArr} />}
-          />
-        </Routes>
-      </Container>
+      <NavBar />
+      <Routes>
+        <Route
+          path="/"
+          element={<Home cardArr={cardArr} setCardArr={setCardArr} />}
+        />
+        <Route
+          path="/card-detail"
+          element={<CardDetail cardArr={cardArr} setCardArr={setCardArr} />}
+        />
+      </Routes>
     </>
   );
-}
+};
 
 export default App;

@@ -10,9 +10,8 @@ import { useLocation } from "react-router-dom";
 
 export default function CardDetail(props) {
   const location = useLocation();
-  const { setCardArr } = props;
+  const { setCardArr, cardArr } = props;
 
-  const [cardArr, setCardsArr] = useState(location.state["data"]);
   const handleRemoveCardFromArr = (item) => {
     const newCardArr = cardArr;
     const itemIndex = newCardArr.indexOf(item);
@@ -20,14 +19,18 @@ export default function CardDetail(props) {
     setCardArr(newCardArr);
   };
 
-  /**
-    const handleAddCardFromArr = (item) => {
+  const handleAddCardFromArr = (item) => {
     const newCardArr = cardArr;
     newCardArr.push(item);
     console.log(newCardArr);
     setCardArr(newCardArr);
   };
-   */
+
+  try {
+    console.log(cardArr);
+  } catch (error) {
+    console.log(error);
+  }
 
   const [cardIndex, setCardIndex] = useState(location.state["index"]);
   const [currentCard, setCurrentCard] = useState(cardArr[cardIndex]);
@@ -120,12 +123,16 @@ export default function CardDetail(props) {
         show={showRemoveModal}
         handleClose={handleCloseRemoveModal}
         card={currentCard}
+        cardIndex={cardIndex}
+        cardArr={cardArr}
         handleShowNextCard={handleShowNextCard}
+        handleShowPreviousCard={handleShowPreviousCard}
         handleRemoveCardFromArr={handleRemoveCardFromArr}
       />
       <CreateNewCardModal
         show={showCreateCardModal}
         handleClose={handleCloseCreateCardModal}
+        handleAddCardFromArr={handleAddCardFromArr}
       />
     </Container>
   );

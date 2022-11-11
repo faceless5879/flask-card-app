@@ -6,7 +6,7 @@ import { storage } from "../../base";
 const API_URL = process.env.REACT_APP_API_URL;
 
 export default function CreateNewCardModal(props) {
-  const { show, handleClose } = props;
+  const { show, handleClose, handleAddCardFromArr } = props;
 
   const [showCardFront, setShowCardFront] = useState(true);
   const handleShowFrontBack = () => setShowCardFront(!showCardFront);
@@ -60,6 +60,7 @@ export default function CreateNewCardModal(props) {
     } catch (e) {
       console.error(e);
     }
+    handleAddCardFromArr(newCard);
     handleClose();
   };
 

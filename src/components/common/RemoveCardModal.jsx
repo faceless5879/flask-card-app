@@ -10,7 +10,10 @@ export default function RemoveCardModal(props) {
     handleClose,
     show,
     card,
+    cardIndex,
+    cardArr,
     handleShowNextCard,
+    handleShowPreviousCard,
     handleRemoveCardFromArr,
   } = props;
 
@@ -26,7 +29,9 @@ export default function RemoveCardModal(props) {
       console.error(e);
     }
     handleClose();
-    handleShowNextCard();
+    cardIndex < cardArr.length - 1
+      ? handleShowNextCard()
+      : handleShowPreviousCard();
     handleRemoveCardFromArr(card);
   };
 
