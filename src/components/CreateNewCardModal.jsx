@@ -9,7 +9,6 @@ export default function CreateNewCardModal(props) {
   const { showState, setShowState, setCardArr, cardArr } = props;
 
   const [showCardFront, setShowCardFront] = useState(true);
-  const handleShowFrontBack = () => setShowCardFront(!showCardFront);
 
   const [fileUrl, setFileUrl] = useState(null);
   const onFileChange = async (e) => {
@@ -74,8 +73,8 @@ export default function CreateNewCardModal(props) {
         <Form onSubmit={onSubmit}>
           <Container style={{ textAlign: "center", paddingBottom: 10 }}>
             <FrontBackToggle
-              showCardFront={showCardFront}
-              handleShowFrontBack={handleShowFrontBack}
+              showState={showCardFront}
+              setShowState={setShowCardFront}
             />
           </Container>
           <InputGroup className="mb-3" hidden={!showCardFront}>
